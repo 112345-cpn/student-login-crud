@@ -28,6 +28,7 @@ public class StudentController {
         return studentService.create(student);
     }
 
+
     @PutMapping("/{studentNo}")
     public Result<Student> update(@PathVariable String studentNo, @RequestBody Student student) {
         return studentService.update(studentNo, student);

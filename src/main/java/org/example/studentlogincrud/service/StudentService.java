@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.spring.service.IService;
 import org.example.studentlogincrud.entity.Result;
 import org.example.studentlogincrud.entity.Student;
 
+
 public interface StudentService extends IService<Student> {
     Result<Object> check(String studentNo);
 
@@ -14,4 +15,5 @@ public interface StudentService extends IService<Student> {
     Result<Student> select(String studentNo);
 
     Result<Object> delete(String studentNo);
+
 }

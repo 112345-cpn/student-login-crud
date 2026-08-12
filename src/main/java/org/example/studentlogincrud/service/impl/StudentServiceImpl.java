@@ -108,6 +108,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         return studentNo != null && studentNo.trim().matches(STUDENT_NUMBER_REGEX);
     }
 
+
     @Override
     public Result<Student> select(String studentNo) {
         if (!isValidStudentNo(studentNo)) {
