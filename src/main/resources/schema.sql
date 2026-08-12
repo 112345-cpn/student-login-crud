@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS admin (
 -- Student table. Students do not have login credentials.
 CREATE TABLE IF NOT EXISTS student (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    number CHAR(10) NOT NULL UNIQUE COMMENT '10 digits starting with 26',
+    public_id CHAR(16) NOT NULL UNIQUE COMMENT '16 random characters',
+    number CHAR(10) NOT NULL UNIQUE COMMENT '10 digits starting with 2600',
     name VARCHAR(100) NOT NULL COMMENT 'student name',
     score DECIMAL(5,2) NULL COMMENT 'score',
     register_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'registration time'

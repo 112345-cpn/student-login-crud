@@ -8,11 +8,14 @@ import org.example.studentlogincrud.mapper.StudentMapper;
 import org.example.studentlogincrud.service.StudentService;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 
 @Service
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> implements StudentService {
     private static final String STUDENT_NUMBER_REGEX = "^2600\\d{6}$";
+    private static final String PUBLIC_ID_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     @Override
     public Result<Object> check(String studentNo) {
@@ -43,8 +46,17 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         if (student.getRegisterTime() == null) {
             student.setRegisterTime(LocalDateTime.now());
         }
+        student.setPublicId(createPublicId());
         save(student);
         return Result.success(student);
+    }
+
+    private String createPublicId() {
+        StringBuilder publicId = new StringBuilder(16);
+        for (int i = 0; i < 16; i++) {
+            publicId.append(PUBLIC_ID_CHARS.charAt(RANDOM.nextInt(PUBLIC_ID_CHARS.length())));
+        }
+        return publicId.toString();
     }
 
     @Override
@@ -108,12 +120,8 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         return studentNo != null && studentNo.trim().matches(STUDENT_NUMBER_REGEX);
     }
 
-
     @Override
     public Result<Student> select(String studentNo) {
-        if (!isValidStudentNo(studentNo)) {
-            return Result.error(400, "学号必须是10位数字，且以2600开头");
-        }
         Student student = getOne(new LambdaQueryWrapper<Student>()
                 .eq(Student::getStudentNo, studentNo.trim()));
         if (student == null) {

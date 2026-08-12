@@ -15,6 +15,9 @@ public class Student {
     @TableId(type = IdType.AUTO)
     private Long id;
 
+    @TableField("public_id")
+    private String publicId;
+
     @TableField("number")
     private String studentNo;
 
