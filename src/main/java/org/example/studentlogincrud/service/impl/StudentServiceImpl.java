@@ -2,6 +2,7 @@ package org.example.studentlogincrud.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
+import org.example.studentlogincrud.dto.PublicScoreResponse;
 import org.example.studentlogincrud.entity.Result;
 import org.example.studentlogincrud.entity.Student;
 import org.example.studentlogincrud.mapper.StudentMapper;
@@ -141,5 +142,23 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
             return Result.error(404, "学生不存在");
         }
         return Result.success();
+    }
+    @Override
+    public Result<PublicScoreResponse> queryPublicScore(String publicId) {
+        if (publicId == null || publicId.trim().isEmpty()) {
+            return Result.error(400, "查询码不能为空");
+        }
+
+        Student student = getOne(new LambdaQueryWrapper<Student>()
+                .eq(Student::getPublicId, publicId.trim()));
+        if (student == null) {
+            return Result.error(404, "未找到对应学生成绩");
+        }
+
+        PublicScoreResponse response = new PublicScoreResponse();
+        response.setName(student.getName());
+        response.setStudentNo(student.getStudentNo());
+        response.setScore(student.getScore());
+        return Result.success(response);
     }
 }

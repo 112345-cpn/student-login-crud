@@ -33,6 +33,11 @@ All `/api/students/**` endpoints require an active administrator session.
 - `GET /api/students/{studentNo}`: get a record by student number.
 - `DELETE /api/students/{studentNo}`: delete a record by student number.
 
+
+### Public QR score query
+
+- `GET /api/public/scores/{publicId}`: query a score through the QR public ID. No administrator login is required. The response contains only `name`, `studentNo`, and `score`.
+
 ## Database
 
 Run `src/main/resources/schema.sql` to create the `admin` and `student` tables. `publicId` consists of 16 secure random characters, for example `aB7xQ2mP9xK3dL7q`. BCrypt hashes are recommended for administrator passwords. The login service still accepts existing plaintext passwords so current data can be migrated gradually.
