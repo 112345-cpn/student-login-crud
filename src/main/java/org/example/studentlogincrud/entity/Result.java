@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 @Data
 public class Result<T> implements Serializable {
-    private Integer code;    // 状态码：200 成功，400 参数错误，404 没找到，500 服务器错误
+    private Integer code;
     private String message;
     private T data;
-    // 成功，带数据
+
     public static <T> Result<T> success(T data) {
         Result<T> result = new Result<>();
         result.code = 200;
@@ -18,11 +18,9 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-
     public static <T> Result<T> success() {
         return success(null);
     }
-
 
     public static <T> Result<T> error(Integer code, String message) {
         Result<T> result = new Result<>();

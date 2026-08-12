@@ -6,13 +6,25 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Data
 @TableName("student")
 public class Student {
     @TableId(type = IdType.AUTO)
-    private String id;
-    private String name;
+    private Long id;
+
+    @TableField("public_id")
+    private String publicId;
+
     @TableField("number")
     private String studentNo;
-    private double score;
+
+    private String name;
+
+    private BigDecimal score;
+
+    @TableField("register_time")
+    private LocalDateTime registerTime;
 }
