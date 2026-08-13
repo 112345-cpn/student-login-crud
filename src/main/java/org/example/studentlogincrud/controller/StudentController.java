@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
@@ -22,12 +24,15 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    /** 学生不再登录；此接口由管理员维护学生资料。 */
+    @GetMapping
+    public Result<List<Student>> list() {
+        return Result.success(studentService.list());
+    }
+
     @PostMapping
     public Result<Student> create(@RequestBody Student student) {
         return studentService.create(student);
     }
-
 
     @PutMapping("/{studentNo}")
     public Result<Student> update(@PathVariable String studentNo, @RequestBody Student student) {

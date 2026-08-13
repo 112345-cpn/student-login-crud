@@ -1,13 +1,56 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>管理后台 · 新生招募系统</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f5f7fb;color:#182230;font-family:"Noto Sans SC",sans-serif}.card{width:min(520px,calc(100% - 44px));padding:42px;border:1px solid #e8ecf2;border-radius:18px;background:#fff;box-shadow:0 20px 55px rgba(25,40,60,.08)}h1{margin:0 0 10px;font-size:28px}p{color:#8993a5;font-size:14px}.logout{margin-top:22px;padding:11px 18px;border:0;border-radius:8px;color:#fff;background:#ff674f;cursor:pointer}</style>
+  <title>学生档案 · 新生招募系统</title>
+  <link rel="stylesheet" href="/admin.css" />
 </head>
-<body><section class="card"><h1>欢迎进入管理后台</h1><p id="welcome">正在读取管理员信息…</p><button class="logout" id="logout">退出登录</button></section><script>const token=localStorage.getItem('adminToken');if(!token){location.href='/';}const info=JSON.parse(localStorage.getItem('adminInfo')||'{}');document.querySelector('#welcome').textContent=`你好，${info.username||'管理员'}。登录状态有效。`;document.querySelector('#logout').onclick=async()=>{try{await fetch('/api/admin/logout',{method:'POST',headers:{Authorization:`Bearer ${token}`}})}finally{localStorage.removeItem('adminToken');localStorage.removeItem('adminInfo');location.href='/';}};</script></body>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">◆</span><div><strong>新生招募</strong><small>RECRUITMENT SYSTEM</small></div></div>
+      <nav><a class="nav-item active" href="#students"><span>▦</span>学生档案</a></nav>
+      <div class="system-status"><i></i><div><b>系统运行中</b><small>数据安全连接</small></div></div>
+    </aside>
+
+    <main class="main-content" id="students">
+      <header class="topbar">
+        <div><p class="eyebrow">STUDENT DIRECTORY</p><h1>学生档案</h1><p class="subtitle">管理、维护与查询新生信息。</p></div>
+        <div class="top-actions"><button class="outline-button" id="refreshButton">↻ 刷新</button><button class="primary-button" id="addButton">＋ 添加学生</button><span class="avatar" id="avatar">管</span></div>
+      </header>
+
+      <section class="stats-grid">
+        <article class="stat-card"><span>学生总数</span><strong id="totalCount">—</strong><small>当前已收录档案</small></article>
+        <article class="stat-card"><span>查询功能</span><strong class="enabled">开放</strong><small>支持学号快速查询</small></article>
+        <article class="stat-card"><span>数据状态</span><strong class="online"><i></i>正常</strong><small>数据库连接稳定</small></article>
+      </section>
+
+      <section class="content-card">
+        <div class="toolbar"><div><h2>全部学生</h2><p>输入学号查询学生档案，或选择记录进行编辑。</p></div><div class="search"><input id="searchInput" maxlength="10" placeholder="输入 10 位学号查询" /><button id="searchButton">查询</button></div></div>
+        <div class="table-wrap"><table><thead><tr><th>学生信息</th><th>学号</th><th>成绩</th><th>登记时间</th><th>操作</th></tr></thead><tbody id="studentTable"><tr><td colspan="5" class="empty">正在加载学生档案…</td></tr></tbody></table></div>
+        <footer><span id="tableSummary">—</span><button class="text-button" id="clearSearch" hidden>清除筛选</button></footer>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <p class="eyebrow" id="modalEyebrow">NEW RECORD</p><h2 id="modalTitle">添加学生</h2><p class="modal-subtitle" id="modalSubtitle">填写学生基本信息，保存后将自动生成查询码。</p>
+      <form id="studentForm" novalidate>
+        <input id="editingNo" type="hidden" />
+        <div class="form-grid">
+          <div class="field"><label for="studentNo">学号 <em>*</em></label><input id="studentNo" maxlength="10" placeholder="2600XXXXXX" required /><small data-error="studentNo"></small></div>
+          <div class="field"><label for="studentName">姓名 <em>*</em></label><input id="studentName" maxlength="100" placeholder="请输入学生姓名" required /><small data-error="studentName"></small></div>
+          <div class="field"><label for="studentScore">成绩</label><input id="studentScore" type="number" min="0" step="0.01" placeholder="可选" /><small data-error="studentScore"></small></div>
+          <div class="field"><label>登记时间</label><div class="readonly-value">由系统在保存时自动记录</div></div>
+        </div>
+        <p class="form-status" id="formStatus"></p>
+        <div class="modal-actions"><button type="button" class="outline-button" id="cancelButton">取消</button><button type="submit" class="primary-button" id="saveButton">保存学生</button></div>
+      </form>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/admin.js"></script>
+</body>
 </html>
