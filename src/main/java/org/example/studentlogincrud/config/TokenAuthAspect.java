@@ -23,7 +23,7 @@ public class TokenAuthAspect {
             + " && !execution(* org.example.studentlogincrud.controller.AdminController.login(..))"
             + " && !execution(* org.example.studentlogincrud.controller.AdminController.register(..))"
             + " && !execution(* org.example.studentlogincrud.controller.AdminController.verifyPassphrase(..))"
-            + " && !execution(* org.example.studentlogincrud.controller.PublicScoreController.query(..))")
+            + " && !execution(* org.example.studentlogincrud.controller.PublicScoreController.*(..))")
     public Object checkToken(ProceedingJoinPoint joinPoint) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
