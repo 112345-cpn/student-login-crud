@@ -23,6 +23,18 @@ Request body:
 }
 ```
 
+
+### Token authentication
+
+- `POST /api/admin/login`: returns a token after successful login.
+- Send the token in every protected request header:
+
+```text
+Authorization: Bearer <token>
+```
+
+- `POST /api/admin/logout`: invalidates the current token.
+- The public QR score endpoint does not require this token.
 ### Student records
 
 All `/api/students/**` endpoints require an active administrator session.
