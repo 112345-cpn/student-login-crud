@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学生档案 · 新生招募系统</title>
+  <link rel="stylesheet" href="/admin.css?v=202608131650">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="side-brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div><strong>新生招募</strong><small>RECRUITMENT SYSTEM</small></div>
+      </div>
+      <nav class="nav-list" aria-label="主导航">
+        <a class="nav-item active" href="#students"><span class="nav-icon">▦</span>学生档案</a>
+      </nav>
+      <div class="sidebar-bottom"><div class="side-note"><span class="live-dot"></span><div><b>系统运行中</b><small>数据安全连接</small></div></div><button class="logout-button" id="logoutButton" type="button"><span>⇥</span> 退出登录</button></div>
+    </aside>
+
+    <main class="main-content" id="students">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">STUDENT DIRECTORY</p>
+          <h1>学生档案</h1>
+          <p class="subtitle">管理、维护与查询新生信息。</p>
+        </div>
+        <div class="top-actions">
+          <button class="outline-button" id="refreshButton" type="button">↻ 刷新</button>
+          <button class="primary-button" id="addButton" type="button">＋ 新增学生</button>
+          <div class="avatar" id="avatar">管</div>
+        </div>
+      </header>
+
+      <section class="stats-grid">
+        <article class="stat-card"><span class="stat-label">学生总数</span><strong id="totalCount">—</strong><span class="stat-hint">当前已收录档案</span></article>
+        <article class="stat-card accent"><span class="stat-label">查询功能</span><strong>开放</strong><span class="stat-hint">支持学号快速查询</span></article>
+        <article class="stat-card"><span class="stat-label">数据状态</span><strong class="status-online"><i></i>正常</strong><span class="stat-hint">数据库连接稳定</span></article>
+      </section>
+
+      <section class="content-card">
+        <div class="card-toolbar">
+          <div><h2>全部学生</h2><p>通过学号检索学生档案，或直接选择记录进行编辑。</p></div>
+          <div class="search-box"><span>⌕</span><input id="searchInput" placeholder="输入 10 位学号查询" maxlength="10"><button id="searchButton" type="button">查询</button></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th class="select-col"><input id="selectAll" class="row-checkbox" type="checkbox" aria-label="全选学生"></th><th>学生信息</th><th>学号</th><th>成绩</th><th>登记时间</th><th class="action-col">操作</th></tr></thead>
+            <tbody id="studentTable"><tr><td colspan="5" class="empty-state">正在加载学生档案…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="table-footer"><div class="selection-actions" id="selectionActions" hidden><span id="selectionSummary">已选择 0 名学生</span><button class="batch-delete-button" id="batchDeleteButton" type="button">删除所选</button></div><div><span id="tableSummary">—</span><button class="text-button" id="clearSearch" type="button" hidden>清除筛选</button></div></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <p class="eyebrow" id="modalEyebrow">NEW RECORD</p>
+      <h2 id="modalTitle">新增学生</h2>
+      <p class="modal-subtitle" id="modalSubtitle">填写学生基本信息，保存后将自动生成查询码。</p>
+      <form id="studentForm" novalidate>
+        <input id="editingNo" type="hidden">
+        <div class="form-grid">
+          <div class="field"><label for="studentNo">学号 <em>*</em></label><input id="studentNo" value="2600" maxlength="10" inputmode="numeric" placeholder="请输入后 6 位数字" required><small data-error="studentNo"></small></div>
+          <div class="field"><label for="studentName">姓名 <em>*</em></label><input id="studentName" placeholder="请输入学生姓名" maxlength="100" required><small data-error="studentName"></small></div>
+          <div class="field"><label for="studentScore">成绩</label><input id="studentScore" type="number" min="0" max="999.99" step="0.01" placeholder="可选"><small data-error="studentScore"></small></div>
+          <div class="field system-time-note"><label>登记时间</label><div class="system-time-value">由系统在保存时自动记录</div></div>
+        </div>
+        <div class="modal-actions"><button type="button" class="outline-button" id="cancelButton">取消</button><button type="submit" class="primary-button" id="saveButton">保存学生</button></div>
+        <p class="form-status" id="formStatus"></p>
+      </form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/admin.js?v=202608131650"></script>
+</body>
+</html>

@@ -5,6 +5,8 @@ import org.example.studentlogincrud.dto.PublicScoreResponse;
 import org.example.studentlogincrud.entity.Result;
 import org.example.studentlogincrud.entity.Student;
 
+import java.util.List;
+
 public interface StudentService extends IService<Student> {
     Result<Object> check(String studentNo);
 

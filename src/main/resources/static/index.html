@@ -1,0 +1,93 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5f7fb" />
+  <title>新生招募系统 · 登录</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/app.css?v=202608131650" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="brand-panel" aria-label="系统介绍">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p class="eyebrow">WELCOME BACK</p>
+      <h1>让每一次加入，<br><em>都被认真看见。</em></h1>
+      <p class="brand-copy">新生招募与信息管理平台<br>简单、清晰、高效。</p>
+      <div class="brand-orbit orbit-one"></div>
+      <div class="brand-orbit orbit-two"></div>
+      <div class="brand-orbit orbit-three"></div>
+      <div class="brand-footer">Student Recruitment System <span>•</span> 2026</div>
+    </section>
+
+    <section class="form-panel">
+      <div class="form-wrap">
+        <div class="mobile-mark brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="form-heading">
+          <p class="eyebrow">管理后台</p>
+          <h2 id="formTitle">欢迎回来</h2>
+          <p id="formSubtitle">登录你的管理账户，开始今天的工作。</p>
+        </div>
+
+        <form id="authForm" novalidate>
+          <div class="field-group">
+            <label for="username">管理员姓名</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg>
+              <input id="username" name="username" type="text" autocomplete="username" placeholder="请输入管理员姓名" maxlength="100" required />
+            </div>
+            <small class="field-error" data-error-for="username"></small>
+          </div>
+          <div class="field-group">
+            <label for="password">密码</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" maxlength="100" required />
+              <button class="icon-button password-toggle" type="button" aria-label="显示密码" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.2-5 9.5-5 9.5 5 9.5 5-3.2 5-9.5 5-9.5-5-9.5-5Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+              </button>
+            </div>
+            <small class="field-error" data-error-for="password"></small>
+          </div>
+
+          <div class="form-options" id="loginOptions">
+            <label class="check-label"><input id="remember" type="checkbox" /> <span>记住我</span></label>
+            <button type="button" class="text-button" id="forgotButton">忘记密码？</button>
+          </div>
+          <div class="form-options register-tip" id="registerTip" hidden>
+            <span>设置一个至少 6 位的安全密码</span>
+            <button type="button" class="text-button" id="backToLogin">返回登录</button>
+          </div>
+
+          <button class="submit-button" id="submitButton" type="submit">
+            <span id="submitText">登录</span><span class="button-arrow" aria-hidden="true">→</span>
+          </button>
+          <p class="status-message" id="statusMessage" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="bottom-action">
+          <span id="bottomPrompt">还没有管理员账户？</span>
+          <button type="button" class="register-link" id="registerButton">立即注册 <span>↗</span></button>
+        </div>
+      </div>
+      <p class="copyright">© 2026 新生招募系统 · 安全连接</p>
+    </section>
+  </main>
+  <div class="passphrase-backdrop" id="passphraseBackdrop" hidden>
+    <section class="passphrase-dialog" role="dialog" aria-modal="true" aria-labelledby="passphraseTitle">
+      <p class="eyebrow">ACCESS VERIFICATION</p>
+      <h2 id="passphraseTitle">请输入暗号</h2>
+      <p>验证通过后才会继续登录或注册。</p>
+      <form id="passphraseForm" novalidate>
+        <input id="accessPassphrase" type="password" autocomplete="off" placeholder="请输入暗号" maxlength="100" required>
+        <small id="passphraseError"></small>
+        <div class="passphrase-actions"><button type="button" class="passphrase-cancel" id="passphraseCancel">取消</button><button type="submit" class="passphrase-confirm" id="passphraseConfirm">验证并继续</button></div>
+      </form>
+    </section>
+  </div>
+  <script src="/app.js?v=202608131650"></script>
+</body>
+</html>
