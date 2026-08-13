@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/app.css" />
+  <link rel="stylesheet" href="/app.css?v=202608131650" />
 </head>
 <body>
   <main class="page-shell">
@@ -76,6 +76,18 @@
       <p class="copyright">© 2026 新生招募系统 · 安全连接</p>
     </section>
   </main>
-  <script src="/app.js"></script>
+  <div class="passphrase-backdrop" id="passphraseBackdrop" hidden>
+    <section class="passphrase-dialog" role="dialog" aria-modal="true" aria-labelledby="passphraseTitle">
+      <p class="eyebrow">ACCESS VERIFICATION</p>
+      <h2 id="passphraseTitle">请输入暗号</h2>
+      <p>验证通过后才会继续登录或注册。</p>
+      <form id="passphraseForm" novalidate>
+        <input id="accessPassphrase" type="password" autocomplete="off" placeholder="请输入暗号" maxlength="100" required>
+        <small id="passphraseError"></small>
+        <div class="passphrase-actions"><button type="button" class="passphrase-cancel" id="passphraseCancel">取消</button><button type="submit" class="passphrase-confirm" id="passphraseConfirm">验证并继续</button></div>
+      </form>
+    </section>
+  </div>
+  <script src="/app.js?v=202608131650"></script>
 </body>
 </html>

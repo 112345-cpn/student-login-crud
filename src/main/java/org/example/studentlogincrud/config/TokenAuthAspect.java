@@ -19,7 +19,11 @@ public class TokenAuthAspect {
         this.tokenService = tokenService;
     }
 
-    @Around("execution(* org.example.studentlogincrud.controller..*(..)) && !execution(* org.example.studentlogincrud.controller.AdminController.login(..)) && !execution(* org.example.studentlogincrud.controller.AdminController.register(..)) && !execution(* org.example.studentlogincrud.controller.PublicScoreController.query(..))")
+    @Around("execution(* org.example.studentlogincrud.controller..*(..))"
+            + " && !execution(* org.example.studentlogincrud.controller.AdminController.login(..))"
+            + " && !execution(* org.example.studentlogincrud.controller.AdminController.register(..))"
+            + " && !execution(* org.example.studentlogincrud.controller.AdminController.verifyPassphrase(..))"
+            + " && !execution(* org.example.studentlogincrud.controller.PublicScoreController.query(..))")
     public Object checkToken(ProceedingJoinPoint joinPoint) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
@@ -36,7 +40,7 @@ public class TokenAuthAspect {
             if (response != null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
-            return Result.error(401, "登录已失效，请重新登录");
+            return Result.error(401, "Login session has expired");
         }
         return joinPoint.proceed();
     }
