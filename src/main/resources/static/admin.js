@@ -16,6 +16,7 @@ const selectionActions = $('#selectionActions');
 const selectionSummary = $('#selectionSummary');
 const batchDeleteButton = $('#batchDeleteButton');
 const logoutButton = $('#logoutButton');
+const qrBackdrop = $('#qrBackdrop');
 
 function apiHeaders() {
   return { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token };
@@ -75,7 +76,7 @@ function renderRows() {
       '<td><b>' + escapeHtml(student.studentNo) + '</b></td>' +
       '<td><span class="score">' + scoreText(student.score) + '</span></td>' +
       '<td>' + formatDate(student.registerTime) + '</td>' +
-      '<td><div class="row-actions"><button class="row-button" data-edit="' + student.studentNo + '">编辑</button><button class="row-button delete" data-delete="' + student.studentNo + '">删除</button></div></td>' +
+      '<td><div class="row-actions"><button class="row-button" data-qr="' + student.publicId + '">二维码</button><button class="row-button" data-edit="' + student.studentNo + '">编辑</button><button class="row-button delete" data-delete="' + student.studentNo + '">删除</button></div></td>' +
       '</tr>';
   }).join('');
   summary.textContent = '显示 ' + state.filtered.length + ' 条记录';
@@ -135,6 +136,22 @@ function openModal(student) {
 }
 
 function closeModal() { modalBackdrop.hidden = true; state.editing = null; }
+
+function openQrModal(publicId) {
+  const student = state.students.find((item) => item.publicId === publicId);
+  if (!student) { toast('未找到该学生', true); return; }
+  $('#qrTitle').textContent = student.name + ' 的二维码';
+  $('#qrSubtitle').textContent = '扫码即可查询该学生的成绩';
+  $('#qrId').textContent = '查询码 · ' + student.publicId;
+  const url = '/api/public/scores/' + encodeURIComponent(publicId) + '/qrcode';
+  $('#qrImage').src = url;
+  $('#qrZoomLink').href = url;
+  $('#qrDownloadLink').href = url;
+  $('#qrDownloadLink').download = student.publicId + '.png';
+  qrBackdrop.hidden = false;
+}
+
+function closeQrModal() { qrBackdrop.hidden = true; }
 
 function validateForm() {
   document.querySelectorAll('[data-error]').forEach((el) => { el.textContent = ''; });
@@ -201,6 +218,8 @@ async function logout() {
 table.addEventListener('click', (event) => {
   const edit = event.target.closest('[data-edit]');
   const del = event.target.closest('[data-delete]');
+  const qr = event.target.closest('[data-qr]');
+  if (qr) openQrModal(qr.dataset.qr);
   if (edit) openModal(state.students.find((student) => student.studentNo === edit.dataset.edit));
   if (del) deleteStudent(del.dataset.delete);
 });
@@ -218,6 +237,7 @@ $('#searchButton').addEventListener('click', queryStudent);
 searchInput.addEventListener('keydown', (event) => { if (event.key === 'Enter') queryStudent(); });
 clearSearch.addEventListener('click', () => { searchInput.value = ''; applySearch(); });
 $('#cancelButton').addEventListener('click', closeModal);
+$('#qrCloseButton').addEventListener('click', closeQrModal);
 studentForm.addEventListener('submit', saveStudent);
 $('#studentNo').addEventListener('input', () => { const input = $('#studentNo'); const digits = input.value.replace(/\D/g, ''); const suffix = digits.startsWith('2600') ? digits.slice(4) : digits; input.value = ('2600' + suffix).slice(0, 10); });
 $('#studentNo').addEventListener('keydown', (event) => { const input = $('#studentNo'); if ((event.key === 'Backspace' || event.key === 'Delete') && input.selectionStart <= 4 && input.selectionEnd <= 4) event.preventDefault(); });
