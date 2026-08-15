@@ -9,6 +9,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.studentlogincrud.dto.PublicScoreResponse;
 import org.example.studentlogincrud.entity.Result;
+import org.example.studentlogincrud.service.OjCrawlerService;
 import org.example.studentlogincrud.service.StudentService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.CacheControl;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Map;
 
 @RestController
@@ -29,18 +31,34 @@ import java.util.Map;
 public class PublicScoreController {
     private final StudentService studentService;
     private final String publicBaseUrl;
+    private final OjCrawlerService ojCrawlerService;
 
     public PublicScoreController(
             StudentService studentService,
-            @Value("${app.public-base-url:}") String publicBaseUrl
+            @Value("${app.public-base-url:}") String publicBaseUrl,
+            OjCrawlerService ojCrawlerService
     ) {
         this.studentService = studentService;
         this.publicBaseUrl = publicBaseUrl == null ? "" : publicBaseUrl.trim();
+        this.ojCrawlerService = ojCrawlerService;
     }
 
     @GetMapping("/{publicId}")
     public Result<PublicScoreResponse> query(@PathVariable String publicId) {
-        return studentService.queryPublicScore(publicId);
+        Result<PublicScoreResponse> result = studentService.queryPublicScore(publicId);
+        // 爬虫启用时：扫码实时爬取 OJ 分数回显；爬取失败则保留数据库分数
+        if (result.getCode() != null && result.getCode() == 200
+                && result.getData() != null && ojCrawlerService.isEnabled()) {
+            try {
+                BigDecimal liveScore = ojCrawlerService.fetchScore(result.getData().getStudentNo());
+                if (liveScore != null) {
+                    result.getData().setScore(liveScore);
+                }
+            } catch (Exception e) {
+                // 爬取失败不阻断查分，回退数据库分数
+            }
+        }
+        return result;
     }
 
     @GetMapping(value = "/{publicId}/qrcode", produces = MediaType.IMAGE_PNG_VALUE)
